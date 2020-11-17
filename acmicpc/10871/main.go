@@ -13,12 +13,9 @@ func main() {
 
     defer wt.Flush()
 
-    // rd.ReadLine()
     line ,_, _ := rd.ReadLine()
     t := strings.Split(string(line), " ")
     x, _ := strconv.Atoi(t[1])
-
-
 
     line2, _, _ := rd.ReadLine()
     values := strings.Split(string(line2), " ")
@@ -29,15 +26,4 @@ func main() {
         }
     }
 
-
-
 }
-
-// func readLine(line []byte) {
-
-// arr := strings.Split(string(line), " ")
-// for _, v := range arr {
-
-// } 
-
-// }
