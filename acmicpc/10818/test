@@ -1,0 +1,36 @@
+package main
+
+import (
+    "os"
+    "bufio"
+    "strconv"
+    "strings"
+    "fmt"
+)
+
+func main() {
+    rd := bufio.NewReader(os.Stdin)
+    // N, _ := rd.ReadString('\n')
+
+    rd.ReadLine()
+    strs, _ := rd.ReadString('\n')
+    nums  := strings.Split(strs, " ")
+
+    min := 1000001
+    max := -1000001
+    t, _ := strconv.Atoi(nums[4])
+    fmt.Println(t, nums)
+    for _, v := range nums {
+        vv, _  := strconv.Atoi(v)
+        fmt.Print(33," ", v," ", vv, "\n")
+        if min > vv {
+            // fmt.Println(min, vv,"ok")
+            min = vv
+        }
+        if max < vv {
+            max = vv
+        }
+    }
+    fmt.Println(min, max)
+
+}
