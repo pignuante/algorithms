@@ -1,0 +1,15 @@
+package main
+
+import (
+    "fmt"
+    "strconv"
+)
+
+func main() {
+
+    fmt.Println(1)
+    a := "23"
+    t, _ :=strconv.Atoi(string(a[0]))
+    fmt.Println(a,t , a[1])
+
+}
