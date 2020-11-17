@@ -1,0 +1,20 @@
+package main
+
+import (
+    "os"
+    "bufio"
+    // "strconv"
+    "strings"
+    "fmt"
+)
+
+func main() {
+    rd := bufio.NewScanner(os.Stdin)
+
+    if rd.Scan() {
+        // N, _ := strconv.Atoi(rd.Text())
+        a := strings.Fields(rd.Text())
+        fmt.Println(a)
+    }
+
+}
