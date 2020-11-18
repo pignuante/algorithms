@@ -1,0 +1,20 @@
+package main
+
+import (
+    "os"
+    "bufio"
+)
+
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanBytes)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    sc.Scan()
+    text := sc.Bytes()[0]
+
+    wt.WriteString(string(text)
+
+}
