@@ -3,6 +3,7 @@ package main
 import (
     "bufio"
     "fmt"
+    "math"
     "os"
     "strconv"
 )
@@ -22,21 +23,31 @@ func main() {
 
     for c := 0; c < C; c++ {
         N, _ := strconv.Atoi(nextString())
-        scores := make([]float64, N)
-        var sum float64 = 0.0
+        scores := make([]int, N)
+        var sum int = 0.0
         for n := 0; n < N; n++ {
-            scores[n], _ = strconv.ParseFloat(nextString(), 64)
+            scores[n], _ = strconv.Atoi(nextString())
             sum += scores[n]
         }
-        mean := sum / float64(N)
+        // mean := floatRound(float64(sum) / float64(N), 0.005)
+        mean := float64(sum) / float64(N)
         count := 0.0
         for n := 0; n < N; n++ {
-            if scores[n] > mean {
+            if float64(scores[n]) > mean {
                 count++
             }
         }
-        fmt.Fprintf(wt, "%0.3f%%\n", count/float64(N)*100)
+        fmt.Fprintf(wt, "%0.3f%%\n", floatRound(count/float64(N)*100, 3))
     }
+}
+
+func round(num float64) int {
+    return int(num + math.Copysign(0.5, num))
+}
+
+func floatRound(num float64, precision int) float64 {
+    output := math.Pow(10, float64(precision))
+    return float64(round(num*output)) / output
 }
 
 func nextString() (r string) {
