@@ -1,0 +1,23 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "strings"
+)
+
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Scan()
+    t := sc.Text()
+    if t == " " {
+        wt.WriteString("0")
+        return
+    }
+    words := strings.Split(strings.Trim(t, " "), " ")
+    wt.WriteString(strconv.Itoa(len(words)))
+}

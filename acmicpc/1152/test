@@ -1,0 +1,25 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "strings"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func init() {
+    sc.Split(bufio.ScanLines)
+}
+
+// 입력이 " "일 경우 문제 발생
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    sc.Scan()
+    sentences := strings.Trim(sc.Text(), " ")
+    words := strings.Split(sentences, " ")
+    wt.WriteString(strconv.Itoa(len(words)))
+}
