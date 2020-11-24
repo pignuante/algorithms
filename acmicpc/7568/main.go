@@ -7,41 +7,44 @@ import (
     "strings"
 )
 
+type bulk struct {
+    weight int
+    height int
+    rank   int
+}
+
 func main() {
     wt := bufio.NewWriter(os.Stdout)
     defer wt.Flush()
     sc := bufio.NewScanner(os.Stdin)
     sc.Scan()
     N, _ := strconv.Atoi(sc.Text())
-    persons := make([][2]int, N)
+    persons := make([]bulk, N)
 
     for k := range persons {
         sc.Scan()
         text := strings.Fields(sc.Text())
         weight, _ := strconv.Atoi(text[0])
         height, _ := strconv.Atoi(text[1])
-        persons[k][0] = weight
-        persons[k][1] = height
+        persons[k].weight = weight
+        persons[k].height = height
     }
 
-    result := orderBulk(persons)
-    for _, v := range result {
-        wt.WriteString(strconv.Itoa(v) + " ")
+    orderBulk(persons)
+    for _, v := range persons {
+        wt.WriteString(strconv.Itoa(v.rank) + " ")
     }
 
 }
 
-func orderBulk(persons [][2]int) []int {
-    l := len(persons)
-    rank := make([]int, l)
+func orderBulk(persons []bulk) {
     for k, v := range persons {
         count := 1
         for _, vv := range persons {
-            if v[0] < vv[0] && v[1] < vv[1] {
+            if v.weight < vv.weight && v.height < vv.height {
                 count++
             }
         }
-        rank[k] = count
+        persons[k].rank = count
     }
-    return rank
 }
