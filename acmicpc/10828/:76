@@ -1,0 +1,84 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "strings"
+)
+
+type actions interface {
+    Push(X int)
+    Pop() int
+    Size() int
+    Empty() int
+    Top() int
+}
+type Element struct {
+    Num int
+    Next *Element
+}
+type Stack struct {
+    head *Element
+    size int
+}
+func (stack *Stack) push(X int) {
+    e := Element{Num:X, Next:stack.head}
+    stack.head = &e
+    stack.size++
+}
+func (stack *Stack) pop() (int) {
+    if stack.size == 0{
+        return -1
+    }
+    e := stack.head
+    stack.head = e.Next
+    stack.size--
+    return e.Num
+}
+func (stack Stack) Size() (int) {
+    return stack.size
+}
+func (stack Stack) empty() (int) {
+    if stack.size == 0 {
+        return 1
+    }
+    return 0
+}
+func (stack Stack) Top() (int) {
+    if stack.size == 0 {
+        return -1
+    }
+    return stack.head.Num
+}
+
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    defer wt.Flush()
+    var stack Stack
+    sc.Scan()
+    N, _ := strconv.Atoi(sc.Text())
+    for ; N > 0; N-- {
+        sc.Scan()
+        text := sc.Text()
+        switch text {
+            case "push":
+            case "pop":
+                v := stack.Pop()
+                wt.WriteString(strconv.Itoa(v))
+            case "size":
+                s := stack.Size()
+                wt.WriteString(strconv.Itoa(s))
+            case "empty":
+                v := stack.top()
+                wt.WriteString(strconv.Itoa(v))
+            case "top":
+                v := stack.top()
+                wt.WriteString(strconv.Itoa(v))
+        }
+    }
+
+}
