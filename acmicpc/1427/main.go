@@ -1,21 +1,17 @@
 package main
 
 import (
-    "bufio"
-    "os"
+    "fmt"
 )
 
 func main() {
-    wt := bufio.NewWriter(os.Stdout)
-    sc := bufio.NewScanner(os.Stdin)
-    defer wt.Flush()
-
-    sc.Scan()
-    N := sc.Text()
+    var N string
+    fmt.Scanf("%s", &N)
+    fmt.Println(N)
     for i := '9'; i >= '0'; i-- {
         for _, v := range N {
             if i == v {
-                wt.WriteString(string(int(v)))
+                fmt.Printf("%s", string(v))
             }
         }
     }
