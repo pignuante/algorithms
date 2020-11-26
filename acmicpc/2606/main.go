@@ -9,7 +9,7 @@ import (
 
 type Computer struct {
     networks []int
-    status   int
+    status   bool
 }
 
 func main() {
@@ -31,17 +31,16 @@ func main() {
         computers[a].networks = append(computers[a].networks, b)
         computers[b].networks = append(computers[b].networks, a)
     }
-    stack := []int{}
+    stack := 1
     DFS(computers, 1, &stack)
-    wt.WriteString(strconv.Itoa(len(stack)))
+    wt.WriteString(strconv.Itoa(stack-1))
 }
-func DFS(computers []Computer, idx int, stack *[]int) {
-    computers[idx].status = 1
+func DFS(computers []Computer, idx int, stack *int) {
+    computers[idx].status = true
     for _, network := range computers[idx].networks {
-        if computers[network].status == 0 {
-            *stack = append(*stack, network)
+        if computers[network].status == false {
+            *stack++
             DFS(computers, network, stack)
         }
     }
-    computers[idx].status = 2
 }
