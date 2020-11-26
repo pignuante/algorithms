@@ -1,0 +1,66 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+)
+
+type Element struct {
+    num    int
+    before *Element
+}
+type Stack struct {
+    head    *Element
+    message string
+    size    int
+}
+
+func (stack *Stack) Push(num int) {
+    before := stack.head
+    e := Element{num: num, before: before}
+    stack.head = &e
+    stack.message += "+\n"
+    stack.size++
+}
+func (stack *Stack) Pop() int {
+    if stack.size == 0 {
+        return -1
+    }
+    node := stack.head
+    stack.head = node.before
+    stack.message += "-\n"
+    stack.size--
+    return node.num
+}
+func (stack Stack) Top() int {
+    if stack.head == nil {
+        return -1
+    }
+    return stack.head.num
+}
+
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    sc := bufio.NewScanner(os.Stdin)
+
+    defer wt.Flush()
+    sc.Scan()
+    N, _ := strconv.Atoi(sc.Text())
+    var stack Stack
+    for count := 1; N > 0; N-- {
+        sc.Scan()
+        n, _ := strconv.Atoi(sc.Text())
+
+        for n >= count {
+            stack.Push(count)
+            count++
+        }
+        if stack.head.num != n {
+            wt.WriteString("NO")
+            return
+        }
+        stack.Pop()
+    }
+    wt.WriteString(stack.message)
+}
