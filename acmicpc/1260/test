@@ -1,0 +1,80 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "strings"
+    "sort"
+    "fmt"
+)
+
+type Node struct {
+    point int
+    edges []int
+    status int
+}
+
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    sc := bufio.NewScanner(os.Stdin)
+
+    defer wt.Flush()
+    sc.Scan()
+    NMV := strings.Fields(sc.Text())
+    N, _ := strconv.Atoi(NMV[0])
+    M, _ := strconv.Atoi(NMV[1])
+    V, _ := strconv.Atoi(NMV[2])
+
+    node := make([]Node, N+1, N+1)
+    for  i := 0; i < M; i++ {
+        sc.Scan()
+        t := strings.Fields(sc.Text())
+        p, _ := strconv.Atoi(t[0])
+        q, _ := strconv.Atoi(t[1])
+        node[p].edges = append(node[p].edges, q)
+    }
+    for i := 0; i < M; i++ {
+        node[i].status = 0
+        sort.Ints(node[i].edges)
+    }
+    stack := []int{V}
+    DFS(node, V, &stack)
+
+    for i := 0; i < M; i++ {
+        node[i].status = 0
+        sort.Ints(node[i].edges)
+    }
+    queue := []int{V}
+    // BFS(node, V, &queue)
+
+    fmt.Println(V, node)
+    fmt.Println(stack)
+    fmt.Println(queue)
+}
+
+func DFS(node []Node, V int, stack *[]int) {
+    node[V].status = 1
+    for _, edge := range node[V].edges {
+        if node[edge].status == 0 {
+            *stack = append(*stack, edge)
+            DFS(node, edge, stack)
+        }
+    }
+    node[V].status = 2
+}
+
+func BFS(node []Node, V int, visited *[]int) {
+    var queue []int
+    node[V].status = 1
+    queue = append(queue, V)
+    *visited = append(*visited, V)
+    for len(queue) > 0 {
+        for _, edge := range node[V].edges {
+            node[edge].status = 1
+            queue = append(queue, edge)
+            *visited = append(*visited, edge)
+        }
+    }
+    node[V].status = 2
+}
