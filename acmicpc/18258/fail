@@ -1,0 +1,97 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "strings"
+)
+
+type Element struct {
+    num    int
+    before *Element
+}
+type Queue struct {
+    head, tail *Element
+    size       int
+}
+
+func (queue *Queue) Push(num int) {
+    element := Element{num: num, before: nil}
+    if queue.head == nil {
+        queue.head = &element
+        queue.tail = &element
+    } else {
+        queue.tail.before = &element
+        queue.tail = &element
+    }
+    queue.size++
+}
+
+func (queue *Queue) Pop() (num int) {
+    if queue.head == nil {
+        num = -1
+    } else {
+        node := queue.head
+        queue.head = node.before
+        num = node.num
+        queue.size--
+    }
+    return
+}
+
+func (queue Queue) Size() (size int) {
+    return queue.size
+}
+
+func (queue Queue) Empty() (isEmpty int) {
+    if queue.size < 1 {
+        isEmpty = 1
+    }
+    return isEmpty
+}
+func (queue Queue) Front() (num int) {
+    if queue.head == nil {
+        num = -1
+    } else {
+        num = queue.head.num
+    }
+    return
+}
+func (queue Queue) Back() (num int) {
+    if queue.tail == nil {
+        num = -1
+    } else {
+        num = queue.tail.num
+    }
+    return
+}
+
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    sc := bufio.NewScanner(os.Stdin)
+
+    defer wt.Flush()
+    sc.Scan()
+    N, _ := strconv.Atoi(sc.Text())
+    var queue Queue
+    for ; N > 0; N-- {
+        sc.Scan()
+        command := strings.Fields(sc.Text())
+        switch command[0] {
+        case "push":
+            num, _ := strconv.Atoi(command[1])
+            queue.Push(num)
+        case "pop":
+            wt.WriteString(strconv.Itoa(queue.Pop()) + "\n")
+        case "size":
+            wt.WriteString(strconv.Itoa(queue.Size()) + "\n")
+        case "empty":
+            wt.WriteString(strconv.Itoa(queue.Empty()) + "\n")
+        case "front":
+            wt.WriteString(strconv.Itoa(queue.Front()) + "\n")
+        case "back":
+            wt.WriteString(strconv.Itoa(queue.Back()) + "\n")
+        }
+    }
+}
