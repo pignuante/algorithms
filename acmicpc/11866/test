@@ -1,0 +1,24 @@
+package main
+import (
+    "bufio"
+    "os"
+    "fmt"
+)
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+    var N, K int
+    fmt.Scanf("%d %d", &N, &K)
+    j := make([]int, N)
+    for k := range j {
+        j[k] = k + 1
+    }
+    idx := K - 1
+    fmt.Printf("<")
+    for len(j) > 1 {
+        fmt.Fprintf(wt, "%d, ", j[idx])
+        j = append(j[:idx], j[idx+1:]...)
+        idx = (idx + K - 1) % len(j)
+    }
+    fmt.Fprintf(wt, "%d>", j[0])
+}
