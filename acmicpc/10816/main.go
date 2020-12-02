@@ -15,16 +15,19 @@ func main() {
 
     sc.Scan()
     N, _ := strconv.Atoi(sc.Text())
-    cards := make(map[string]int, N)
+    cards := make(map[int]int, N)
     for ; N > 0; N-- {
         sc.Scan()
-        cards[sc.Text()]++
+        t, _ := strconv.Atoi(sc.Text())
+        cards[t]++
+
     }
     sc.Scan()
     M, _ := strconv.Atoi(sc.Text())
     for ; M > 0; M-- {
         sc.Scan()
-        if v, exists := cards[sc.Text()]; exists {
+        t, _ := strconv.Atoi(sc.Text())
+        if v, exists := cards[t]; exists {
             wt.WriteString(strconv.Itoa(v) + " ")
         } else {
             wt.WriteString("0 ")
