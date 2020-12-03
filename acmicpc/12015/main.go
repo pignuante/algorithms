@@ -32,14 +32,18 @@ func main() {
 }
 
 func lowerBounder(vector *[]int, num int) {
+    start := 0
     if (*vector)[len(*vector)-1] < num {
         *vector = append(*vector, num)
     } else {
-        for i := 0; i < len(*vector); i++ {
-            if (*vector)[i] >= num {
-                (*vector)[i] = num
-                break
+        for end := len(*vector); start <= end; {
+            mid := (start + end)>>1
+            if (*vector)[mid] < num {
+                start = mid + 1
+            } else {
+                end = mid - 1
             }
         }
+        (*vector)[start] = num
     }
 }
