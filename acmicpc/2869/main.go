@@ -22,11 +22,5 @@ func main() {
     wt := bufio.NewWriter(os.Stdout)
 
     defer wt.Flush()
-    A, B, V := nextInt(), nextInt(), nextInt()
-    wt.WriteString(strconv.Itoa(snail(A, B, V)))
 }
 
-func snail(A, B, V int) (days int) {
-    days = (V-B-1)/(A-B) + 1
-    return
-}
