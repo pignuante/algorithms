@@ -24,11 +24,14 @@ func main() {
 }
 
 func sequence(num int) (moved int) {
-    moved = 1
-
-    for i := 1; num > 1; i++ {
-        num = num - 6*i
-        moved++
+    sum := 0
+    if num == 1 {
+        moved = 1
+    } else {
+        for num >= sum {
+            moved++
+            sum = 2 + 3*moved*(moved-1)
+        }
     }
     return
 }
