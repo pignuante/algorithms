@@ -20,8 +20,8 @@ func nextInt() (r int) {
 func main() {
     sc.Split(bufio.ScanWords)
     wt := bufio.NewWriter(os.Stdout)
-
     defer wt.Flush()
+
     N := nextInt()
     wt.WriteString(strconv.Itoa(Sugar(N)))
 }
@@ -29,7 +29,6 @@ func main() {
 func Sugar(kg int) (bags int) {
     five := kg / 5
     three := 0
-
     for temp := kg % 5; five >= 0; {
         if temp%3 == 0 {
             three = temp / 3
