@@ -18,6 +18,6 @@ func nextInt() (r int) {
 func main() {
     sc.Split(bufio.ScanWords)
     wt := bufio.NewWriter(os.Stdout)
-
     defer wt.Flush()
+
 }
