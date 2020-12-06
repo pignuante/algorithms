@@ -23,21 +23,34 @@ func main() {
     defer wt.Flush()
 
     N := nextInt()
-    num := 0
-    for ; N > 0; N-- {
-        count := 0
-        n := nextInt()
-        for i := 1; i <= n; i++ {
-            if n%i == 0 {
-                count++
-                if count > 2 {
-                    break
-                }
-            }
-        }
-        if count == 2 {
-            num++
+    nums, max := make([]int, N, N), 0
+    for i := 0; i < N; i++ {
+        nums[i] = nextInt()
+        if max < nums[i] {
+            max = nums[i]
         }
     }
-    wt.WriteString(strconv.Itoa(num))
+    Sieve, count := Eratosthenes(max), 0
+    for _, v := range nums {
+        if !Sieve[v] {
+            count++
+        }
+    }
+    wt.WriteString(strconv.Itoa(count))
+}
+
+func Eratosthenes(n int) (Sieve []bool) {
+    Sieve = make([]bool, n+1, n+1)
+    Sieve[0], Sieve[1] = true, true
+
+    for i := 2; i <= n; i++ {
+        if Sieve[i] {
+            continue
+        }
+        for j := i+i; j <= n; j+=i {
+            Sieve[j] = true
+        }
+    }
+
+    return
 }
