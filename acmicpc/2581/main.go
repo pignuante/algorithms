@@ -7,6 +7,7 @@ import (
 )
 
 var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
 func nextInt() (r int) {
     sc.Scan()
     r = 0
@@ -16,6 +17,7 @@ func nextInt() (r int) {
     }
     return
 }
+
 func main() {
     sc.Split(bufio.ScanWords)
     wt := bufio.NewWriter(os.Stdout)
@@ -42,7 +44,6 @@ func main() {
 func Eratosthenes(n int) (Sieve []bool) {
     Sieve = make([]bool, n+1, n+1)
     Sieve[0], Sieve[1] = true, true
-
     for i := 2; i <= n; i++ {
         if Sieve[i] {
             continue
