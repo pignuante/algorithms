@@ -26,7 +26,13 @@ func main() {
         if auset == 0 && ausar == 0 && heru == 0 {
             break
         }
-        if auset*auset+ausar*ausar == heru*heru || ausar*ausar+heru*heru == auset*auset || heru*heru+auset*auset == ausar*ausar {
+        if heru < auset {
+            heru, auset = auset, heru
+        }
+        if heru < ausar {
+            heru, ausar = ausar, heru
+        }
+        if auset*auset+ausar*ausar == heru*heru {
             wt.WriteString("right\n")
         } else {
             wt.WriteString("wrong\n")
