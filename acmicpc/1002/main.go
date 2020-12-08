@@ -3,17 +3,14 @@ package main
 import (
     "bufio"
     "os"
+    "strconv"
 )
 
 var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
 
 func nextInt() (r int) {
     sc.Scan()
-    r = 0
-    for _, c := range sc.Bytes() {
-        r *= 10
-        r += int(c - '0')
-    }
+    r, _ = strconv.Atoi(sc.Text())
     return
 }
 func main() {
@@ -25,9 +22,9 @@ func main() {
     for i := 0; i < T; i++ {
         x1, y1, r1 := nextInt(), nextInt(), nextInt()
         x2, y2, r2 := nextInt(), nextInt(), nextInt()
-        dist := (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)
-        rd := (r2 - r1) * (r2 - r1)
-        rs := (r2 + r1) * (r2 + r1)
+        dist := (x2-x1) * (x2-x1)+(y2-y1) * (y2-y1)
+        rd := (r2-r1) * (r2-r1)
+        rs := (r2+r1) * (r2+r1)
 
         c := "0"
         if dist == 0 && rd == 0 {
