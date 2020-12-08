@@ -1,0 +1,44 @@
+package main
+
+import (
+    "bufio"
+    "os"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int64) {
+    sc.Scan()
+    t := 0
+    for _, c := range sc.Bytes() {
+        t *= 10
+        t += int(c - '0')
+    }
+    return int64(t)
+}
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    T := nextInt()
+    for ; T > 0; T-- {
+        x1, y1, r1 := nextInt(), nextInt(), nextInt()
+        x2, y2, r2 := nextInt(), nextInt(), nextInt()
+        d := (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)
+        rd := (r1 - r2) * (r1 - r2)
+        rs := (r1 + r2) * (r1 + r2)
+
+        if d == 0 && rd == 0 { // 내접 && 반지름 같음 ->  같은 원 == -1
+            wt.WriteString("-1\n")
+        } else if d == 0 { // 내접하지만 반지름이 다름 -> 내접 X == 0
+            wt.WriteString("0\n")
+        } else if d == rd || d == rs { // 외접&&반지름과 거리 같음 == 1
+            wt.WriteString("1\n")
+        } else if rd < d && d < rs { // 외접 && 반지름 차보단 크고 && 반지름 합보단 작고 == 2
+            wt.WriteString("2\n")
+        } else { // 외접 && 반지름의 합보다 거리가 클 경우
+            wt.WriteString("0\n")
+        }
+    }
+}

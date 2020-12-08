@@ -1,0 +1,46 @@
+package main
+
+import (
+    "bufio"
+    "os"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int) {
+    sc.Scan()
+    r = 0
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return r
+}
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    T := nextInt()
+    for ; T > 0; T-- {
+        x1, y1, r1 := nextInt(), nextInt(), nextInt()
+        x2, y2, r2 := nextInt(), nextInt(), nextInt()
+        d := (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)
+        rsum := (r1+r2) * (r1+r2)
+        rdiff := (r1-r2) *(r1-r2)
+
+        k := "0"
+        if d == 0 {
+            if r1 == r2 {
+                k = "-1"
+            }
+        } else {
+            if d == rdiff || d == rsum {
+                k = "1"
+            } else if d < rsum && d > rdiff {
+                k = "2"
+            }
+        }
+        wt.WriteString(k+"\n")
+    }
+}
