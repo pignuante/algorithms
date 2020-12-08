@@ -20,11 +20,15 @@ func main() {
 
     N := nextInt()
     prices := make([][]int, N, N)
-    for i := 0; i < N; i++ {
-        prices[i] = make([]int, 3, 3)
+    prices[0] = []int{nextInt(), nextInt(), nextInt()}
+
+    for i := 1; i < N; i++ {
         prices[i] = []int{nextInt(), nextInt(), nextInt()}
+        prices[i][0] = Min(prices[i-1][1], prices[i-1][2]) + prices[i][0]
+        prices[i][1] = Min(prices[i-1][0], prices[i-1][2]) + prices[i][1]
+        prices[i][2] = Min(prices[i-1][0], prices[i-1][1]) + prices[i][2]
+
     }
-    getPrice(&prices)
     wt.WriteString(strconv.Itoa(Min(prices[N-1]...))+"\n")
 }
 
@@ -36,11 +40,4 @@ func Min(nums ...int) (min int) {
         }
     }
     return
-}
-func getPrice(RGBs *[][]int) {
-    for i := 1; i < len(*RGBs); i++ {
-        (*RGBs)[i][0] = Min((*RGBs)[i-1][1], (*RGBs)[i-1][2]) + (*RGBs)[i][0]
-        (*RGBs)[i][1] = Min((*RGBs)[i-1][0], (*RGBs)[i-1][2]) + (*RGBs)[i][1]
-        (*RGBs)[i][2] = Min((*RGBs)[i-1][0], (*RGBs)[i-1][1]) + (*RGBs)[i][2]
-    }
 }
