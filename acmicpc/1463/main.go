@@ -29,11 +29,11 @@ func main() {
     }
     dp[N-1] = 1
     for i := N; i > 1; i-- {
-        if i%3 == 0 {
-            dp[i/3] = Min(dp[i]+1, dp[i/3])
-        }
         if i%2 == 0 {
             dp[i/2] = Min(dp[i]+1, dp[i/2])
+        }
+        if i%3 == 0 {
+            dp[i/3] = Min(dp[i]+1, dp[i/3])
         }
         dp[i-1] = Min(dp[i]+1, dp[i-1])
     }
