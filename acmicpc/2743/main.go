@@ -1,18 +1,9 @@
 package main
 
-import (
-    "bufio"
-    "os"
-    "strconv"
-)
-
-var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+import "fmt"
 
 func main() {
-    sc.Split(bufio.ScanWords)
-    wt := bufio.NewWriter(os.Stdout)
-    defer wt.Flush()
-
-    sc.Scan()
-    wt.WriteString(strconv.Itoa(len(sc.Text())))
+    var s string
+    fmt.Scan(&s)
+    fmt.Print(len(s))
 }
