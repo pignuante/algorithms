@@ -23,14 +23,13 @@ func main() {
 
     N := nextInt()
 
-    for i := 0; i < N; i++ {
-        str := ""
-        for space := 0; space < i; space++ {
-            str += " "
+    for i := N; i > 0; i-- {
+        for space := 0; space < N-i; space++ {
+            wt.WriteByte(' ')
         }
-        for star := 0; star < 2*N-i*2-1; star++ {
-            str += "*"
+        for star := 0; star < 2*i-1; star++ {
+            wt.WriteByte('*')
         }
-        wt.WriteString(str + "\n")
+        wt.WriteByte('\n')
     }
 }
