@@ -1,0 +1,48 @@
+package ref
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    r = 0
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return
+}
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+
+    defer wt.Flush()
+    A := nextInt()
+    var vector []int
+    vector = append(vector, nextInt())
+    for i := 1; i < A; i++ {
+        lowerBounder(&vector, nextInt())
+    }
+    wt.WriteString(strconv.Itoa(len(vector)))
+}
+
+func lowerBounder(vector *[]int, num int) {
+    start := 0
+    if (*vector)[len(*vector)-1] < num {
+        *vector = append(*vector, num)
+    } else {
+        for end := len(*vector); start <= end; {
+            mid := (start + end)>>1
+            if (*vector)[mid] < num {
+                start = mid + 1
+            } else {
+                end = mid - 1
+            }
+        }
+        (*vector)[start] = num
+    }
+}
