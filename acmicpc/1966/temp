@@ -1,0 +1,79 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "container/heap"
+    "strconv"
+    "fmt"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+type Node struct {
+    idx, priority, index int
+}
+type PriorityQueue []*Node
+
+func (pq PriorityQueue) Len() int {return len(pq)}
+func (pq PriorityQueue) Less(i, j int) bool {
+    return pq[i].priority > pq[j].priority
+}
+func (pq PriorityQueue) Swap(i, j int) {
+    pq[i], pq[j] = pq[j], pq[i]
+    pq[i].index, pq[j].index = pq[j].index, pq[i].index
+}
+func (pq *PriorityQueue) Push(x interface{}) {
+    n := len(*pq)
+    item := x.(*Node)
+    item.index = n
+    *pq = append(*pq, item)
+}
+
+func (pq *PriorityQueue) Pop() interface{} {
+    old := *pq
+    n := len(old)
+    item := old[n-1]
+    old[n-1] = nil
+    item.index = -1
+    *pq = old[0:n-1]
+    return item
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    T := nextInt()
+    for ; T > 0; T-- {
+        N, M := nextInt(), nextInt()
+        pq := PriorityQueue{}
+        heap.Init(&pq)
+        for i := 0; i < N; i++ {
+            heap.Push(&pq, &Node{idx:i, priority:nextInt(), index:i})
+            for _, v := range pq {
+                fmt.Println(*v)
+            }
+            fmt.Println()
+        }
+        for _, v := range pq {
+            if v.idx == M {
+                wt.WriteString(strconv.Itoa(v.index))
+                wt.WriteByte('\n')
+            }
+        }
+        for _, v := range pq {
+            fmt.Println(*v)
+        }
+        fmt.Println()
+    }
+}
