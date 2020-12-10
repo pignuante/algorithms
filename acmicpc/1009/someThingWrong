@@ -1,0 +1,36 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    T := nextInt()
+    for ; T > 0; T-- {
+        a, b := nextInt(), nextInt()
+        for temp, i := a, 0; i < b; i++ {
+            a = (a * temp) % 10
+        }
+        if a == 0 {
+            a = 10
+        }
+        wt.WriteString(strconv.Itoa(a) + "\n")
+    }
+}
