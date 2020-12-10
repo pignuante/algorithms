@@ -22,9 +22,9 @@ func main() {
     wt := bufio.NewWriter(os.Stdout)
     defer wt.Flush()
 
-    sum, books := nextInt(), 0
+    sum := nextInt()
     for i := 0; i < 9; i++ {
-        books += nextInt()
+        sum -= nextInt()
     }
-    wt.WriteString(strconv.Itoa(sum - books))
+    wt.WriteString(strconv.Itoa(sum))
 }
