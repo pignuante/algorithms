@@ -23,14 +23,12 @@ func main() {
     defer wt.Flush()
 
     girl, boy, intern := nextInt(), nextInt(), nextInt()
-    wt.WriteString(strconv.Itoa(Min(Min(girl/2, boy), (girl+boy-intern)/3)))
-
-}
-
-func Min(a, b int) (min int) {
-    min = a
-    if a > b {
-        min = b
+    result := 0
+    for people := girl + boy - intern; girl > 1 && boy > 0 && people > 2; {
+        girl -= 2
+        boy -= 1
+        people -= 3
+        result++
     }
-    return
+    wt.WriteString(strconv.Itoa(result))
 }
