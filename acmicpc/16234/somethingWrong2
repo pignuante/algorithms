@@ -1,0 +1,126 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+    "fmt"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+type country struct {
+    population int
+    visited  bool
+}
+var mvs = [][]int{{0, 1}, {0, -1}, {-1, 0}, {1, 0}}
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    N, L, R := nextInt(), nextInt(), nextInt()
+    countries := make([][]country, N, N)
+    for y := 0; y < N; y++ {
+        countries[y] = make([]country, N, N)
+        for x := 0; x < N; x++ {
+            countries[y][x].population = nextInt()
+        }
+    }
+    flag, count := true, 0
+    for  {
+        flag = PopulationMovement(&countries, L, R)
+        if !flag {
+            break
+        }
+        fmt.Println("???")
+        count++
+    }
+    for _, v := range countries {
+        fmt.Println(v)
+    }
+    fmt.Println(count)
+}
+
+func CountriesInit(countries *[][]country) {
+    for y, l := 0, len(*countries); y < l; y++ {
+        for x := 0;  x < l; x++ {
+            (*countries)[y][x].visited = false
+        }
+    }
+}
+
+func MovePopulation(countries *[][]country, pop int) {
+    for y, line := range (*countries) {
+        for x := range line {
+            if (*countries)[y][x].visited {
+                (*countries)[y][x].population = pop
+                (*countries)[y][x].visited = false
+            }
+        }
+    }
+}
+
+func PopulationMovement(countries *[][]country, L, R int) (flag bool){
+    var queue [][2]int
+    N, pop, count := len(*countries), 0, 0
+    for y := 0; y < N; y++ {
+        for x := 0; x < N; x++ {
+            if (*countries)[y][x].visited {
+                continue
+            }
+            queue = append(queue, [2]int{y, x})
+            count = 0
+            for len(queue) > 0 {
+                y, x := queue[0][0], queue[0][1]
+                for _, mv := range mvs {
+                    ym, xm := y+mv[0], x+mv[1]
+                    if 0 <= ym && ym < N && 0 <= xm && xm < N && !(*countries)[ym][xm].visited{
+                        dif := Abs((*countries)[ym][xm].population - (*countries)[y][x].population)
+                        if L <= dif && dif <= R  {
+                            if !(*countries)[y][x].visited {
+                                (*countries)[y][x].visited = true
+                                pop += (*countries)[y][x].population
+                                count++
+                            }
+                            (*countries)[ym][xm].visited = true
+                            pop += (*countries)[ym][xm].population
+                            count++
+                            queue = append(queue, [2]int{ym, xm})
+                            flag = true
+                        }
+                    }
+                }
+                if count != 0 {
+                    fmt.Println("r", pop, count, pop/count)
+                    MovePopulation(countries, pop/count)
+                } else {
+                    fmt.Println("r", pop, count)
+                }
+                queue = queue[1:]
+            }
+        }
+    }
+
+    for _, v := range (*countries) {
+        fmt.Println(v)
+    }
+    fmt.Println(flag)
+    return
+}
+
+func Abs(num int) (r int) {
+    r = num
+    if r < 0 {
+        r = -r
+    }
+    return
+}
