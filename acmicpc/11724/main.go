@@ -38,7 +38,7 @@ func main() {
 			count++
 		}
 	}
-	wt.WriteString(strconv.Itoa(count))
+	wt.WriteString(strconv.Itoa(count) )
 }
 
 func DFS(points *[][]int, visited *[]bool, idx int) {
