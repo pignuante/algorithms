@@ -1,0 +1,52 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "fmt"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    N := nextInt()
+    rooms := make([]int64, N, N)
+    for i := 0; i < N; i++ {
+        rooms[i] = int64(nextInt())
+    }
+
+    B, C, viewer := int64(nextInt()), int64(nextInt()), int64(0)
+    for i := 0; i < N; i++ {
+        rooms[i] = Max(rooms[i]-B, 0)
+        viewer += 1
+        if rooms[i]%C == 0 {
+            viewer += rooms[i] / C
+        } else {
+            viewer += rooms[i]/C + 1
+        }
+    }
+    fmt.Println(rooms)
+    wt.WriteString(strconv.FormatInt(viewer, 10))
+}
+
+func Max(a, b int64) (max int64) {
+    max = a
+    if a < b {
+        max = b
+    }
+    return
+}
