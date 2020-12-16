@@ -23,19 +23,13 @@ func main() {
     defer wt.Flush()
 
     N := nextInt()
-    wt.WriteString(strconv.Itoa(GetArea(N)))
+    wt.WriteString(strconv.Itoa(GetNumOfTile(N)))
 }
 
-func GetArea(k int) int {
-    t, w := GetNumOfTile(k)
-    h := w + t
-    return (w + h) * 2
-}
-
-func GetNumOfTile(K int) (int, int) {
-    a, b := 0, 1
+func GetNumOfTile(K int) int {
+    a, b := 4, 6
     for i := 1; i < K; i++ {
         a, b = b, a+b
     }
-    return a, b
+    return a
 }
