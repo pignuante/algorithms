@@ -1,0 +1,52 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "fmt"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return
+}
+
+func main() {
+    const N = 99
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    n, k := nextInt(), nextInt()
+    cards := make([]int, n, n)
+    var results []string
+    visited := make([]bool, N+1, N+1)
+    for i := 0; i < n; i++ {
+        cards[i] = nextInt()
+    }
+    DFS(&cards, 0, k, "", &results, &visited)
+    fmt.Println(results)
+}
+
+func DFS(cards *[]int, idx, k int, str string, results *[]string, visited *[]bool) {
+    if idx == k {
+        *results = append(*results, str)
+        return
+    }
+    for _, card := range *cards {
+        if (*visited)[card] {
+            continue
+        }
+        fmt.Println(results, card)
+        (*visited)[card] = true
+        DFS(cards, idx+1, k, str+strconv.Itoa(card), results, visited)
+        (*visited)[card] = false
+    }
+}
