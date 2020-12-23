@@ -1,0 +1,29 @@
+package main
+
+import "fmt"
+
+func main() {
+    var s []byte
+    fmt.Scan(&s)
+    var f func() int
+    f = func() int {
+        r := 0
+        for {
+            switch {
+            case len(s) == 0:
+                return r
+            case s[0] == ')':
+                s = s[1:]
+                return r
+            case len(s) > 1 && s[1] == '(':
+                k := int(s[0]) - '0'
+                s = s[2:]
+                r += k * f()
+            default:
+                s = s[1:]
+                r++
+            }
+        }
+    }
+    fmt.Println(f())
+}

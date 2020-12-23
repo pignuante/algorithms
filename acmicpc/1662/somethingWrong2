@@ -1,0 +1,41 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+    "fmt"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+type result struct {
+    count, idx int
+}
+
+func main() {
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+    sc.Scan()
+    S := sc.Bytes()
+
+    fmt.Println(Recursive(len(S)-1, S))
+    fmt.Println(S)
+}
+func Recursive(index int, S []byte) (i, count int){
+    count = 0
+    for i = index; i >= 0; i-- {
+        fmt.Println(i)
+        if S[i] == '(' {
+            break
+        } else if S[i] == ')' {
+            i, c := Recursive(index-1, S)
+            fmt.Println("r", i, count, c, int(S[i]-'0'), int(S[i]-'0') * c)
+            count += int(S[i]-'0') * c
+            i--
+        } else {
+            count++
+            fmt.Println("e", i, count)
+        }
+    }
+    return i-1, count
+}
