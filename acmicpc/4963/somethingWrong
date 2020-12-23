@@ -1,0 +1,78 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+    "fmt"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+type Point struct {
+    y, x int
+}
+var mvs = [8][2]int{
+    {1,0},{-1, 0}, {0, -1}, {0, 1},
+    {1, -1}, {1, 1}, {-1, -1}, {-1, 1},
+}
+var w, h int
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    for {
+        w, h = nextInt(), nextInt()
+        fmt.Println(w ,h)
+        if w == 0 && h == 0 {
+            break
+        }
+        Map, visited := make([][]int, h, h), make([][]bool, h, h)
+        for y := 0; y < h; y++ {
+            for x := 0; x < w; x++ {
+                Map[y] = append(Map[y], nextInt())
+            }
+            visited[y] = make([]bool, w, w)
+        }
+        count := 0
+        for y := 0; y < h; y++ {
+            for x := 0; x < w; x++ {
+                fmt.Println(y, x)
+                if FindMap(&Map, &visited, y, x) {
+                    count++
+                }
+            }
+        }
+        fmt.Println(count)
+    }
+}
+
+func FindMap(Map *[][]int, visited *[][]bool, y, x int)(flag bool) {
+
+    fmt.Println(*visited)
+    queue := []Point{ {y:y, x:x}}
+    for len(queue) > 0 {
+        fmt.Println(1)
+        point := (queue)[0]
+        (queue) = (queue)[1:]
+        for _, mv := range mvs {
+            ym, xm := point.y + mv[0], point.x + mv[1]
+            for 0 <= ym && ym  < h && 0 <= xm && xm < w { // x,y 범위 맞는지
+                if (*Map)[ym][xm] == 1 && !(*visited)[ym][xm] {
+                    queue = append(queue, Point{y:ym, x:xm})
+                    flag = true
+                    (*visited)[ym][xm] = true
+                }
+            }
+        }
+    }
+    return flag
+}
