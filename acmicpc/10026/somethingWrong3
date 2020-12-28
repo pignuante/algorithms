@@ -1,0 +1,93 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return
+}
+
+type Point struct {
+    y, x int
+}
+
+var N int
+var mvs = [][2]int{
+    {1, 0}, {-1, 0}, {0, -1}, {0, 1},
+}
+
+func main() {
+    // sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+
+    N = nextInt()
+    Board := make([][]byte, N, N)
+    for i := 0; i < N; i++ {
+        sc.Scan()
+        Board[i] = sc.Bytes()
+    }
+    visited := make([][]bool, N, N)
+    for i := 0; i < N; i++ {
+        visited[i] = make([]bool, N, N)
+    }
+    count := 0
+    for y := 0; y < N; y++ {
+        for x := 0; x < N; x++ {
+            if !visited[y][x] {
+                BFS(Board, &visited, y, x)
+                count++
+            }
+        }
+    }
+    wt.WriteString(strconv.Itoa(count))
+    wt.WriteByte(' ')
+
+    for y := 0; y < N; y++ {
+        for x := 0; x < N; x++ {
+            if Board[y][x] == 'G' {
+                Board[y][x] = 'R'
+            }
+            visited[y][x] = false
+        }
+    }
+    count = 0
+    for y := 0; y < N; y++ {
+        for x := 0; x < N; x++ {
+            if !visited[y][x] {
+                BFS(Board, &visited, y, x)
+                count++
+            }
+        }
+    }
+    wt.WriteString(strconv.Itoa(count))
+}
+
+func BFS(Board [][]byte, visited *[][]bool, y, x int) {
+    queue := []Point{{y, x}}
+    color := Board[y][x]
+    (*visited)[y][y] = true
+    for len(queue) > 0 {
+        point := queue[0]
+        queue = queue[1:]
+        for _, mv := range mvs {
+            ym, xm := point.y + mv[0], point.x + mv[1]
+            if 0 <= ym && ym < N && 0 <= xm && xm < N {
+                if color == Board[ym][xm] && !(*visited)[ym][xm] {
+                    (*visited)[ym][xm] = true
+                    queue = append(queue, Point{y:ym, x:xm})
+                }
+            }
+        }
+    }
+}
