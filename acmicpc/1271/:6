@@ -1,0 +1,31 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "math/big"
+)
+
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    wt := bufio.NewWriter(os.Stdout)
+    defer wt.Flush()
+    n := big.NewInt(int64(nextInt()))
+    m := big.NewInt(int64(nextInt()))
+
+    wt.WriteString(big.NewInt(0).Div(n, m).String())
+    wt.WriteByte('\n')
+    // wt.WriteString(strconv.Itoa(n % m))
+}
