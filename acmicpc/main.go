@@ -6,6 +6,7 @@ import (
     // "strconv"
 )
 
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
 var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
 func nextInt() (r int) {
     sc.Scan()
@@ -18,7 +19,6 @@ func nextInt() (r int) {
 
 func main() {
     sc.Split(bufio.ScanWords)
-    wt := bufio.NewWriter(os.Stdout)
     defer wt.Flush()
 
 }
