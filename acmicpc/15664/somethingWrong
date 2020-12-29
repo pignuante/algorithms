@@ -1,0 +1,67 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "sort"
+    "strconv"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+var (
+    N, M int
+    nums, stack []byte
+    visited []bool
+    dup map[byte]bool
+)
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N, M = nextInt(), nextInt()
+    nums, visited = make([]byte, N, N), make([]bool, N, N)
+    for i := 0; i < N; i++ {
+        sc.Scan()
+        nums[i] = sc.Bytes()[0]
+    }
+    sort.Slice(nums, func(i, j int)(bool) {
+        return nums[i] < nums[j]
+    })
+
+    dup = make(map[byte]bool)
+    Recursive()
+    wt.WriteString(strconv.Itoa(N))
+}
+
+func Recursive() {
+    if len(stack) == M {
+        for _, v := range stack {
+            wt.WriteByte(v)
+            wt.WriteByte(' ')
+        }
+        wt.WriteByte('\n')
+    }
+    for i, v := range nums {
+        if visited[i] || dup[v]{
+            continue
+        }
+        if l := len(stack); l == 0 || stack[l-1] <= v{
+            dup[v] = true
+            visited[i] = true
+            stack = append(stack, v)
+            Recursive()
+            stack = stack[:len(stack)-1]
+            dup[v] = false
+            visited[i] = false
+        }
+    }
+}
