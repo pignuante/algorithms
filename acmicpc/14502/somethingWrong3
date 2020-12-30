@@ -1,0 +1,118 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "fmt"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+var (
+    N, M, count int
+    Map [][]byte
+    viruses [][2]int
+    mvs = [][2]int {
+        {1, 0}, {-1, 0}, {0, -1}, {0, 1},
+    }
+)
+const Walls = 3
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N, M = nextInt(), nextInt()
+    Map = make([][]byte, N, N)
+    for y := 0; y < N; y++ {
+        Map[y] = make([]byte, M, M)
+        for x := 0; x < M; x++ {
+            sc.Scan()
+            status := sc.Bytes()[0]
+            Map[y][x] = status
+            if status == '2' {
+                viruses = append(viruses, [2]int{y, x})
+            }
+        }
+    }
+
+    MakeWalls(0)
+    wt.WriteString(strconv.Itoa(count))
+}
+
+func SpreadVirus() {
+    AfterMap := make([][]byte, len(Map))
+    for y := range Map {
+        AfterMap[y] = make([]byte, len(Map[y]), len(Map[y]))
+        copy(AfterMap[y], Map[y])
+    }
+
+    var queue [][2] int
+    copy(queue, viruses)
+    for len(queue) > 0 {
+        point := queue[0]
+        queue = queue[1:]
+        for _, mv := range mvs {
+            ym, xm := point[0] + mv[0], point[1] + mv[1]
+            if 0 <= ym && ym < N && 0 <= xm && xm < M{
+                if AfterMap[ym][xm] == '0' {
+                    AfterMap[ym][xm] = '2'
+                    queue = append(queue, [2]int{ym, xm})
+                }
+            }
+        }
+    }
+    fmt.Println()
+    for _, v := range AfterMap {
+        for _, vv := range v {
+            fmt.Printf("%c ", vv)
+        }
+        fmt.Println()
+    }
+    count = Max(CountSafe(AfterMap), count)
+}
+
+func CountSafe(lab [][]byte) (c int) {
+    for _, v := range lab {
+        for _, vv := range v {
+            if vv == '0' {
+                c++
+            }
+        }
+    }
+    return
+}
+func MakeWalls(c int) {
+    if c == Walls {
+        SpreadVirus()
+        return
+    }
+    // 방문 중복 제거하기
+    for y, mm := range Map {
+        for x, status := range mm {
+            if status == '0' {
+                Map[y][x] = '1'
+                MakeWalls(c+1)
+                Map[y][x] = '0'
+            }
+        }
+    }
+
+}
+func Max(a, b int) (max int) {
+    max = a
+    if a < b {
+        max = b
+    }
+    return
+}

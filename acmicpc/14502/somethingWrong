@@ -1,0 +1,117 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+    "fmt"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+
+type Point struct {
+    y, x int
+    status byte
+}
+var (
+    N, M, count int
+    Map [][]Point
+    viruses, walls []Point
+    flag []bool
+    mvs = [][]int{
+        {1, 0}, {-1, 0},{0,-1}, {0, 1},
+    }
+)
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+    N, M = nextInt(), nextInt()
+    Map = make([][]Point, N, N)
+    for y := 0; y < N; y++ {
+        Map[y] = make([]Point, M, M)
+        for x := 0; x < M; x++ {
+            sc.Scan()
+            t := sc.Bytes()[0]
+            Map[y][x] = Point{y:y, x:x, status:t}
+            if t == '2' {
+                viruses = append(viruses, Point{y:y, x:x, status:t})
+            } else if t == '1' {
+                walls = append(walls, Point{y:y, x:x, status:t})
+            }
+        }
+    }
+    for _, v := range Map {
+        fmt.Println(v)
+    }
+    fmt.Println(viruses)
+    MakeWall(0)
+    fmt.Println(count)
+}
+
+func BFS() {
+    AfterMap := make([][]Point, N, N)
+    for i, v := range Map {
+        AfterMap[i] = make([]Point, M, M)
+        copy(AfterMap[i], v)
+    }
+
+    queue  := []Point{viruses[0]}
+    for len(queue) > 0 {
+        point := queue[0]
+        queue = queue[1:]
+        AfterMap[point.y][point.x].status = '2'
+        for _, mv := range mvs {
+            ym, xm := point.y+mv[0], point.x+mv[1]
+            if 0 <= ym && ym < N && 0 <= xm && xm < M {
+                if AfterMap[ym][xm].status == '0' {
+                    queue = append(queue, Point{y:ym, x:xm})
+                    AfterMap[ym][xm].status = '2'
+                }
+            }
+        }
+    }
+    c := 0
+    for _, v := range AfterMap {
+        for _, p := range v {
+            if p.status == '1' {
+                c++
+            }
+        }
+    }
+    count = Max(count, c)
+}
+
+func MakeWall(count int) {
+    if count == 3 {
+        BFS()
+        return
+    }
+    for y := 0; y < N; y++ {
+        for x := 0; x < M; x++ {
+            if Map[y][x].status == '0' {
+                Map[y][x].status = '1'
+                MakeWall(count+1)
+                Map[y][x].status = '0'
+            }
+        }
+    }
+}
+
+func Max(a, b int) (max int) {
+    max = a
+    if a < b {
+        max = b
+    }
+    return
+}
