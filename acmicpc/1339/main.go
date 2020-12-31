@@ -59,6 +59,7 @@ func main() {
         result += (9 - k) * v.Value
     }
     wt.WriteString(strconv.Itoa(result))
+
 }
 
 func Reverse(numbers []byte) []byte {
