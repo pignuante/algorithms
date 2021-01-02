@@ -1,0 +1,51 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+type Node struct {
+    Value byte
+    Before, Next *Node
+}
+
+type Edtor struct {
+    Cursor, Head, Tail *Node
+    Location int
+}
+
+func (editor *Edtor) MoveLeft () {
+    e := (*editor)
+    if e.Cursor.Before == nil {
+        return
+    }
+    e.Cursor = e.Cursor.Before
+    e.Location--
+}
+func (editor *Edtor) MoveRight() {
+    e := (*editor)
+    if e.Cursor.Next == nil {
+        return
+    }
+    e.Cursor = e.Cursor.Before
+    e.Location--
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+}
