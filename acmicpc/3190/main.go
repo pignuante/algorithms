@@ -84,9 +84,9 @@ func Dummy() (turn int) {
         if c < L && turn == Commands[c].Turn {
             switch Commands[c].Cmd {
             case 'D':
-                mv = (mv + 1) % 4
+                mv = (mv +4 + 1) % 4
             case 'L':
-                mv = (mv - 1) % 4
+                mv = (mv + 4 - 1) % 4
             }
             c++
         }
