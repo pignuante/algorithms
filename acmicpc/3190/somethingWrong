@@ -1,0 +1,95 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "container/list"
+    // "strconv"
+    "fmt"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+type Command struct {
+    Turn int
+    Command byte
+}
+type Point struct {
+    Visited bool
+    Apple bool
+
+}
+var (
+    N int
+    cmds []Command
+    snake list.List
+    Map [][]Point
+    mvs = [][2]int{
+        {0, 1}, {1, 0}, {0, -1}, {-1, 0},
+    }
+)
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N = nextInt()
+    K := nextInt()
+    Map = make([][]Point, N, N)
+    for y := 0; y < N; y++ {
+        Map[y] = make([]Point, N, N)
+    }
+    for i := 0; i < K; i++ {
+        y, x := nextInt(), nextInt()
+        Map[y][x].Apple = true
+    }
+    L := nextInt()
+    cmds = make([]Command, L, L)
+    for i := 0; i < L; i++ {
+        t := nextInt()
+        sc.Scan()
+        cmd := sc.Bytes()[0]
+        cmds[i].Turn, cmds[i].Command = t, cmd
+    }
+    fmt.Println(Dummy())
+}
+
+func Dummy() (turn int) {
+    snake.PushFront([2]int{0, 0})
+    mv := 0
+    turn, c := 0, 0
+    y, x := 0, 0
+    for {
+        turn++
+        if c < len(cmds) && cmds[c].Turn == turn {
+            switch cmds[c].Command {
+            case 'L':
+                mv = (mv-1)%4
+            case 'D':
+                mv = (mv+1)%4
+            }
+            c++
+        }
+        y += mvs[mv][0]
+        x += mvs[mv][1]
+        if y < 0 || y >= N || x < 0 || x > N || Map[y][x].Visited {
+            fmt.Println("break", y, x, mvs[mv])
+            break
+        }
+        snake.PushFront([2]int{y, x})
+        Map[y][x].Visited= true
+        if !Map[y][x].Apple {
+            p := snake.Remove(snake.Back()).([2]int)
+            Map[p[0]][p[1]].Visited = false
+        }
+    }
+    return
+}

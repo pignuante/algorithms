@@ -1,0 +1,96 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    "container/list"
+    // "strconv"
+    "fmt"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+type Point struct {
+    Apple, Visited bool
+}
+type Command struct {
+    Turn int
+    Command byte
+}
+var (
+    N int
+    Map  [][]Point
+    Commands []Command
+    Snake list.List
+    mvs = [][2]int {
+        {0, 1}, {1, 0}, {0, -1}, {-1, 0},
+    }
+)
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N = nextInt()
+    Map = make([][]Point, N, N)
+    for y := 0; y < N; y++ {
+        Map[y] = make([]Point, N, N)
+    }
+    numOfApple := nextInt()
+    for i := 0; i < numOfApple; i++ {
+        y, x := nextInt(), nextInt()
+        Map[y][x].Apple = true
+    }
+    numOfCmd := nextInt()
+    Commands = make([]Command, numOfCmd, numOfCmd)
+    for i := 0; i < numOfCmd; i++ {
+        turn := nextInt()
+        sc.Scan()
+        command := sc.Bytes()[0]
+        Commands[i] = Command{Turn:turn, Command:command}
+    }
+
+    fmt.Println(Dummy())
+}
+
+func Dummy() (turn int){
+    Snake.PushFront([2]int{0, 0})
+    Map[0][0].Visited = true
+    mv, y, x, c := 0, 0, 0, 0
+    for {
+        turn++
+        if y < 0 || y >= N || x < 0 || x >= N || Map[y][x].Visited {
+            break
+        }
+        Snake.PushFront([2]int{y, x})
+        Map[y][x].Visited = true
+        if Map[y][x].Apple {
+            Map[y][x].Apple = false
+        } else {
+            o := Snake.Remove(Snake.Back()).([2]int)
+            Map[o[0]][o[1]].Visited = false
+        }
+        if  c < len(Commands) && Commands[c].Turn == turn {
+            cmd := Commands[c].Command
+            switch cmd {
+            case 'D':
+                mv = (mv+1)%4
+            case 'L':
+                mv = (mv-1)%4
+            }
+            c++
+        }
+        y += mvs[mv][0]
+        x += mvs[mv][1]
+    }
+    return
+}
