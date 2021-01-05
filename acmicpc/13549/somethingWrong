@@ -1,0 +1,91 @@
+package main
+
+import (
+    "bufio"
+    "container/heap"
+    "os"
+    "strconv"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c - '0')
+    }
+    return
+}
+
+type Point struct {
+    Second, Location int
+}
+type Points []Point
+
+func (h Points) Len() int {
+    return len(h)
+}
+func (h Points) Less(i, j int) bool {
+    return h[i].Second < h[j].Second
+}
+func (h Points) Swap(i, j int) {
+    h[i], h[j] = h[j], h[i]
+}
+func (h *Points) Push(element interface{}) {
+    *h = append(*h, element.(Point))
+}
+func (h *Points) Pop() interface{} {
+    old := *h
+    n := len(old)
+    element := old[n-1]
+    *h = old[0 : n-1]
+    return element
+}
+
+var (
+    N, K    int
+    Queue   Points
+    Visited []bool
+)
+
+const MAX = 100000
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N, K = nextInt(), nextInt()
+    Visited = make([]bool, MAX+1, MAX+1)
+    wt.WriteString(strconv.Itoa(FindBrother()))
+    wt.WriteByte('\n')
+}
+
+func FindBrother() (second int) {
+    heap.Init(&Queue)
+    heap.Push(&Queue, Point{Second: 0, Location: N})
+    Visited[N] = true
+
+    for Queue.Len() > 0 {
+        t := heap.Pop(&Queue).(Point)
+        loc, sec := t.Location, t.Second
+        if loc == K {
+            second = sec
+            break
+        }
+        if l := loc * 2; l <= MAX && !Visited[l] {
+            heap.Push(&Queue, Point{Second: sec, Location: l})
+            Visited[l] = true
+        }
+        if l := loc + 1; l <= MAX && !Visited[l] {
+            heap.Push(&Queue, Point{Second: sec + 1, Location: l})
+            Visited[l] = true
+        }
+        if l := loc - 1; 0 <= l && l <= MAX && !Visited[l] {
+            heap.Push(&Queue, Point{Second: sec + 1, Location: l})
+            Visited[l] = true
+        }
+    }
+    return
+}
