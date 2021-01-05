@@ -1,0 +1,66 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+    "fmt"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+type Node struct {
+    Value int
+    Before, Next *Node
+}
+
+type Ring struct {
+    Head, Tail *Node
+    Size, Count int
+}
+
+func (ring *Ring) Push(value int) {
+    node := Node{Value:value}
+    if (*ring).Size == 0 {
+        node.Before = (*ring).Tail
+        (*ring).Tail = &node
+        (*ring).Head = (*ring).Tail
+    } else {
+        node.Before = (*ring).Tail
+        (*ring).Tail.Next = &node
+        (*ring).Tail = &node
+    }
+    (*ring).Size++
+}
+
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N, M := nextInt(), nextInt()
+    nums := make([]int, M, M)
+    fmt.Println(nums, N)
+    ring := Ring{}
+    ring.Push(1)
+    fmt.Println(ring.Head)
+    ring.Push(9)
+    fmt.Println(ring.Head)
+    ring.Push(77)
+    fmt.Println(ring.Head, ring.Head.Next, ring.Head.Next.Next)
+    fmt.Println(ring.Tail, ring.Tail.Before, ring.Tail.Before)
+
+    // for i := 0; i < M; i++ {
+        // nums[i] = nextInt()
+    // }
+    // fmt.Println(N)
+}

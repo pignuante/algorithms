@@ -1,0 +1,120 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+    "fmt"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+type Node struct {
+    Value int
+    Before, After *Node
+}
+
+type Ring struct {
+    Head, Tail *Node
+    Size, Count int
+}
+
+func (ring *Ring) Push(value int) {
+    node := Node{Value:value}
+    if (*ring).Head == nil && (*ring).Tail == nil {
+       (*ring).Head = &node
+       (*ring).Tail = &node
+       node.Before = (*ring).Tail
+       node.After= &node
+    } else {
+        tail := (*ring).Tail
+        node.After = tail.After
+        node.Before= tail
+        (*ring).Tail = &node
+        (*ring).Head.Before = (*ring).Tail
+    }
+    (*ring).Size++
+}
+
+func (ring *Ring) Pop()(value int, ok bool) {
+    value, ok = -1, false
+    if (*ring).Size > 0{
+        head := (*ring).Head
+        (*ring).Head = head.After
+        (*ring).Head.Before = head.Before
+        value, ok = head.Value, true
+        head.After, head.Before = nil, nil
+        (*ring).Size--
+    }
+    return
+}
+
+func (ring *Ring) MoveLeft() {
+    if (*ring).Head == nil && (*ring).Tail == nil {
+        return
+    }
+    (*ring).Head, (*ring).Tail = (*ring).Head.Before, (*ring).Tail.Before
+    (*ring).Count++
+}
+func (ring *Ring) MoveRight() {
+    r := (*ring)
+    if r.Head == nil && r.Tail == nil {
+        return
+    }
+    fmt.Println("before left",(*ring).Head.Before.Value, (*ring).Head.Value, (*ring).Head.After.Value)
+
+    (*ring).Head, (*ring).Tail = (*ring).Head.After, (*ring).Tail.After
+    fmt.Println("left",(*ring).Head.Before.Value, (*ring).Head.Value, (*ring).Head.After.Value)
+
+    (*ring).Count++
+}
+
+func (ring *Ring) FindNum(value int)(idx int, ok bool) {
+    r := (*ring)
+    n := r.Head
+    for idx = 0; idx < r.Size; idx++ {
+        if (*n).Value == value {
+            ok = true
+            break
+        }
+        n = n.After
+    }
+    return
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N, M := nextInt(), nextInt()
+    nums := make([]int, M, M)
+    r := Ring{}
+    for i := 1; i <= N; i++ {
+       r.Push(i)
+    }
+    for i := 0; i < M; i++ {
+        nums[i] = nextInt()
+    }
+
+    fmt.Println(N, M)
+    fmt.Println(r.Head.Value)
+    fmt.Println(r.Tail.Value)
+    r.MoveRight()
+    fmt.Println(r.Head.Value)
+    fmt.Println(r.Tail.Value)
+
+    fmt.Println(r.Head.Value)
+    fmt.Println(r.Tail.Value)
+    r.MoveRight()
+    fmt.Println(r.Head.Value)
+    fmt.Println(r.Tail.Value)
+
+}

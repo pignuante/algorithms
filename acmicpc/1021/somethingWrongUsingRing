@@ -1,0 +1,40 @@
+package main
+
+import (
+    "bufio"
+    "container/ring"
+    "os"
+    // "strconv"
+    "fmt"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N, M := nextInt(), nextInt()
+    queue := ring.New(N)
+    for i := 1; i <= N; i++ {
+        queue.Value = i
+        queue = queue.Next()
+    }
+    nums := make([]int, M, M)
+    for i := 0; i < M; i++ {
+        nums[i] = nextInt()
+    }
+    fmt.Println(queue)
+    queue.Do(func(x interface{}){
+        fmt.Println(x)
+    })
+}
