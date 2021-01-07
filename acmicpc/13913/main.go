@@ -149,5 +149,6 @@ func Max(a, b int) (max int) {
     if a < b {
         max = b
     }
+
     return
 }
