@@ -1,0 +1,57 @@
+package main
+
+import (
+    "bufio"
+    "os"
+    // "strconv"
+)
+
+var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
+var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
+func nextInt() (r int) {
+    sc.Scan()
+    for _, c := range sc.Bytes() {
+        r *= 10
+        r += int(c-'0')
+    }
+    return
+}
+
+type Node struct {
+    Value byte
+    Left, Right *Node
+}
+type Tree struct {
+    Root *Node
+}
+func (tree Tree) Find(value byte) (node *Node, ok bool) {
+    if tree.Root != nil{
+        return
+    }
+    if tree.Root.Value == value {
+        node, ok = tree.Root, true
+    }
+    return
+}
+func (tree *Tree) Add(root, left, right byte) {
+    if (*tree).Root == nil {
+        (*tree).Root = &Node{Value:root,}
+        if left != '.' {
+            l:= &Node{Value:left}
+            (*tree).Root.Left = l
+        }
+        if right != '.' {
+            r:= &Node{Value:right}
+            (*tree).Root.Left = r
+        }
+    } else {
+
+    }
+}
+
+func main() {
+    sc.Split(bufio.ScanWords)
+    defer wt.Flush()
+
+    N := nextInt()
+}
