@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(2557)
+project(problem)
 
-add_excutable(2557 main.cpp)
+add_executable(results main.cpp)
