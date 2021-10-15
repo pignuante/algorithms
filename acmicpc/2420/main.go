@@ -1,28 +1,19 @@
 package main
 
 import (
-	"bufio"
-	"os"
+	"fmt"
 )
 
-var wt *bufio.Writer = bufio.NewWriter(os.Stdout)
-var sc *bufio.Scanner = bufio.NewScanner(os.Stdin)
-
-func nextInt() int {
-	sc.Scan()
-	r, f := 0, 1
-	for _, c := range sc.Bytes() {
-		if c == '-' {
-			f = -1
-			continue
-		}
-		r *= 10
-		r += int(c - '0')
-	}
-	return r * f
+func main() {
+	var N, M int
+	fmt.Scanf("%d %d", &N, &M)
+	result := Absolute(N - M)
+	fmt.Printf("%d", result)
 }
 
-func main() {
-	sc.Split(bufio.ScanWords)
-	defer wt.Flush()
+func Absolute(number int) int {
+	if number < 0 {
+		number *= -1
+	}
+	return number
 }
